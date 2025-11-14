@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday!</title>
+<style>
+  /* ====== Basic reset & fonts ====== */
+  :root{
+    --bg:#0b0720;
+    --card:#111018;
+    --accent:#ff6b9a;
+    --muted:#b3b3c7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,#060316 0%, #0b0720 100%);
+    color:white;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+
+  /* ====== Container ====== */
+  .wrap{
+    width:100%;
+    max-width:900px;
+    min-height:600px;
+    background: radial-gradient(800px 400px at 10% 10%, rgba(255,107,154,0.06), transparent),
+                linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius:18px;
+    padding:18px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 10px 40px rgba(3,3,10,0.6);
+  }
+
+  /* ====== Entrance card ====== */
+  .entrance{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+    z-index:20;
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .card{
+    width:88%;
+    max-width:520px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:24px;
+    text-align:center;
+    box-shadow: 0 8px 30px rgba(3,3,10,0.6);
+    transform-origin:center;
+  }
+  .card h1{font-size:34px; letter-spacing:0.6px; margin-bottom:8px; color:var(--accent)}
+  .card p{color:var(--muted); margin-bottom:18px}
+  .btn{
+    display:inline-block;
+    background:linear-gradient(90deg,var(--accent),#ff9fb7);
+    color:#111;
+    padding:12px 20px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
+    user-select:none;
+    box-shadow: 0 8px 20px rgba(255,107,154,0.12);
+  }
+
+  /* ====== Main content ====== */
+  .main{
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all .6s ease;
+    padding:24px;
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:16px;
+  }
+  .show .main{opacity:1; transform:none}
+
+  .top{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .title{
+    font-size:28px;
+    font-weight:700;
+  }
+  .controls{display:flex; gap:8px; align-items:center}
+
+  .photo {
+    width:180px;
+    height:180px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#222,#111);
+    overflow:hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .message{
+    background: rgba(255,255,255,0.02);
+    border-radius:12px;
+    padding:14px;
+    color:var(--muted);
+  }
+
+  /* ====== Gallery ====== */
+  .gallery{
+    display:flex;
+    gap:10px;
+    overflow:auto;
+    padding-bottom:6px;
+  }
+  .gallery img{height:90px;border-radius:8px; cursor:pointer;object-fit:cover}
+
+  /* ====== Balloons & confetti ====== */
+  .balloons, .confetti {pointer-events:none; position:absolute; inset:0; z-index:10;}
+  .balloon{
+    position:absolute;
+    bottom:-120px;
+    width:48px;height:72px;border-radius:50% 50% 50% 50%;
+    opacity:.95;
+    transform-origin:center bottom;
+    animation:floatUp linear infinite;
+  }
+  .string{
+    position:absolute; width:2px; height:60px; left:50%; transform:translateX(-50%); bottom:-60px; background:rgba(255,255,255,0.12);
+    border-radius:2px;
+  }
+  @keyframes floatUp{
+    0% { transform: translateY(0) rotate(-6deg) }
+    50% { transform: translateY(-30px) rotate(6deg) }
+    100% { transform: translateY(-100vh) rotate(-6deg) }
+  }
+  .confetti .piece{
+    position:absolute; width:8px;height:12px;opacity:0.95; transform-origin:center;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to { transform: translateY(110vh) rotate(360deg); opacity:1 }
+  }
+
+  /* ====== footer & inputs ====== */
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input[type="text"], textarea{
+    background:transparent;border:1px solid rgba(255,255,255,0.06); padding:10px;border-radius:8px;color:#fff; min-width:180px;
+  }
+  .small{font-size:13px;color:var(--muted)}
+  .share{background:linear-gradient(90deg,#7ce3ff,#9f7bff); padding:9px 12px;border-radius:8px;color:#051224; font-weight:700; cursor:pointer}
+  @media (min-width:760px){
+    .main{grid-template-columns: 1fr 260px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <!-- Entrance overlay -->
+  <div class="entrance" id="entrance">
+    <div class="card">
+      <h1>Happy Birthday!</h1>
+      <p>Ek chota sa surprise — open your gift 🎁</p>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <div class="btn" id="openBtn">Open Your Gift</div>
+        <div class="btn" id="previewBtn" style="background:transparent;color:var(--accent);border:1px solid rgba(255,107,154,0.12)">Preview</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balloons and confetti canvas -->
+  <div class="balloons" id="balloons"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <!-- Main site -->
+  <div class="main" id="main">
+    <div>
+      <div class="top">
+        <div>
+          <div class="title" id="titleText">Happy Birthday — <span id="nameShow">Friend</span> 🎉</div>
+          <div class="small">Click the balloons or press Open to start the celebration.</div>
+        </div>
+        <div class="controls">
+          <div class="photo" id="profilePhoto"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="photo"></div>
+          <div>
+            <div class="small">Background Music</div>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <div class="btn" id="playMusic">Play</div>
+              <div class="btn" id="mute" style="background:transparent;color:var(--accent);border:1px solid rgba(255,107,154,0.12)">Mute</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:14px"></div>
+
+      <div class="message" id="messageBox">
+        <strong>Personal message</strong>
+        <p id="messageText">Wishing you love, laughter & lots of cake 🧁. Edit the message below to personalize.</p>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div>
+        <strong>Photos</strong>
+        <div class="gallery" id="gallery">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="">
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div class="row">
+        <input id="nameInput" type="text" placeholder="Name to show (e.g. Maryam)" />
+        <div class="btn" id="applyName">Apply</div>
+        <div class="btn share" id="shareBtn">Share</div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <textarea id="msgInput" rows="2" placeholder="Write a personal message..." style="flex:1"></textarea>
+        <div class="btn" id="applyMsg">Save</div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <div style="background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); border-radius:12px; padding:12px">
+        <div style="font-weight:700;margin-bottom:8px">RSVP & Notes</div>
+        <div class="small">Add a quick RSVP message or download this page.</div>
+        <div style="height:10px"></div>
+        <input type="text" id="rsvpName" placeholder="Your name" />
+        <div style="height:8px"></div>
+        <div class="btn" id="rsvpBtn">Send RSVP</div>
+        <div style="height:12px"></div>
+        <div class="small">Download as PNG (mobile may ask permission)</div>
+        <div style="height:8px"></div>
+        <div class="btn" id="downloadBtn">Download</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Audio element (placeholder) -->
+<audio id="bgAudio" loop crossorigin="anonymous">
+  <!-- Replace src with your music file or hosted mp3 -->
+  <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_9e6f0d03e9.mp3?attachment" type="audio/mpeg">
+</audio>
+
+<script>
+/* ====== Basic interaction & animations ====== */
+const entrance = document.getElementById('entrance');
+const openBtn = document.getElementById('openBtn');
+const previewBtn = document.getElementById('previewBtn');
+const wrap = document.getElementById('wrap');
+const main = document.getElementById('main');
+const balloonsEl = document.getElementById('balloons');
+const confettiEl = document.getElementById('confetti');
+const playMusic = document.getElementById('playMusic');
+const muteBtn = document.getElementById('mute');
+const bgAudio = document.getElementById('bgAudio');
+const nameInput = document.getElementById('nameInput');
+const applyName = document.getElementById('applyName');
+const nameShow = document.getElementById('nameShow');
+const gallery = document.getElementById('gallery');
+const profilePhoto = document.getElementById('profilePhoto').querySelector('img');
+const msgInput = document.getElementById('msgInput');
+const applyMsg = document.getElementById('applyMsg');
+const messageText = document.getElementById('messageText');
+const shareBtn = document.getElementById('shareBtn');
+const rsvpBtn = document.getElementById('rsvpBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+
+let musicPlaying = false;
+
+/* open action: show main and spawn balloons/confetti */
+function openSite() {
+  entrance.style.opacity = 0;
+  entrance.style.transform = 'scale(.98)';
+  setTimeout(()=> { entrance.style.display='none'; wrap.classList.add('show'); }, 600);
+  spawnBalloons(10);
+  spawnConfetti(20);
+  // Try to play music (must come from user gesture — openBtn counts)
+  playBackground();
+}
+
+/* spawn balloons */
+function spawnBalloons(count=8){
+  for(let i=0;i<count;i++){
+    const b = document.createElement('div');
+    b.className='balloon';
+    const size = 40 + Math.random()*70;
+    b.style.width = size+'px';
+    b.style.height = Math.round(size*1.25)+'px';
+    b.style.left = Math.random()*95 + '%';
+    b.style.animationDuration = (8 + Math.random()*8)+'s';
+    b.style.background = `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), transparent),
+      hsl(${Math.round(Math.random()*360)},70%,60%)`;
+    b.innerHTML = '<div class="string"></div>';
+    balloonsEl.appendChild(b);
+    // remove after animation
+    setTimeout(()=> b.remove(), 16000 + Math.random()*6000);
+    // click to pop
+    b.addEventListener('click', () => {
+      popBalloon(b);
+    });
+  }
+}
+
+/* pop balloon */
+function popBalloon(el){
+  el.style.transition='transform .12s ease, opacity .14s linear';
+  el.style.transform='scale(0.2)';
+  el.style.opacity='0';
+  setTimeout(()=>el.remove(),160);
+  spawnConfetti(6, el.getBoundingClientRect());
+}
+
+/* spawn confetti pieces */
+function spawnConfetti(n=12, fromRect=null){
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className='piece';
+    p.style.left = (fromRect ? (fromRect.left + Math.random()*fromRect.width) : (Math.random()*100) ) + 'px';
+    p.style.top = (fromRect ? (fromRect.top + Math.random()*fromRect.height) : (-20 + Math.random()*30) ) + 'px';
+    p.style.background = `hsl(${Math.floor(Math.random()*360)},70%,60%)`;
+    p.style.animationDuration = (1.2 + Math.random()*1.6)+'s';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    confettiEl.appendChild(p);
+    setTimeout(()=>p.remove(), 2600);
+  }
+}
+
+/* background music controls */
+function playBackground(){
+  if(!musicPlaying){
+    bgAudio.play().then(()=> {
+      musicPlaying = true;
+      playMusic.textContent = 'Pause';
+    }).catch(err=>{
+      // autoplay blocked; show paused state
+      musicPlaying = false;
+      playMusic.textContent = 'Play';
+    });
+  } else {
+    bgAudio.pause();
+    musicPlaying = false;
+    playMusic.textContent = 'Play';
+  }
+}
+
+playMusic.addEventListener('click', () => {
+  playBackground();
+});
+muteBtn.addEventListener('click', () => {
+  bgAudio.muted = !bgAudio.muted;
+  muteBtn.textContent = bgAudio.muted ? 'Unmute' : 'Mute';
+});
+
+/* Apply name & message */
+applyName.addEventListener('click', ()=>{
+  const v = nameInput.value.trim();
+  if(v) nameShow.textContent = v;
+});
+applyMsg.addEventListener('click', ()=>{
+  messageText.textContent = msgInput.value.trim() || "Wishing you love, laughter & lots of cake 🧁";
+});
+
+/* gallery click to set profile photo */
+gallery.addEventListener('click', (e)=>{
+  if(e.target.tagName === 'IMG'){
+    profilePhoto.src = e.target.src;
+  }
+});
+
+/* preview opens but keeps entrance */
+previewBtn.addEventListener('click', ()=>{
+  spawnBalloons(6);
+  spawnConfetti(12);
+});
+
+/* share use Web Share if available */
+shareBtn.addEventListener('click', async ()=>{
+  const url = location.href;
+  const text = `Happy Birthday ${nameShow.textContent}! Open this surprise 🎉`;
+  if(navigator.share){
+    try{ await navigator.share({title:'Birthday Surprise', text, url}); }
+    catch(e){ alert('Share cancelled') }
+  } else {
+    // fallback: copy link
+    await navigator.clipboard.writeText(url);
+    alert('Link copied to clipboard');
+  }
+});
+
+/* RSVP demo */
+rsvpBtn.addEventListener('click', ()=>{
+  const r = document.getElementById('rsvpName').value.trim();
+  if(!r) { alert('Enter your name'); return; }
+  alert(`Thanks ${r}! RSVP received 🎉`);
+});
+
+/* simple download (screenshot) fallback - uses html2canvas not included; fallback to print */
+downloadBtn.addEventListener('click', ()=>{
+  // Simple fallback: open print dialog which user can save as PDF on mobile
+  window.print();
+});
+
+/* open site on click */
+openBtn.addEventListener('click', openSite);
+
+/* allow clicking the wrap to spawn more balloons */
+wrap.addEventListener('click', (e)=>{
+  if(wrap.classList.contains('show')) spawnBalloons(3);
+});
+</script>
+</body>
+  </html>
